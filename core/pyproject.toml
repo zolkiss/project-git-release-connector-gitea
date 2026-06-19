@@ -1,0 +1,6 @@
+[
+project
+]
+name = "project-git-release"
+version = "0.0.1"
+dependencies = []

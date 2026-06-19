@@ -1,0 +1,13 @@
+[
+project
+]
+name = "project-git-release-connector-gitea"
+version = "0.0.1"
+dependencies = [
+    "project-git-release<=0.1.0"
+]
+
+[
+project.entry-points."project-git-release.connectors"
+]
+gitea = "project_git_release_connector_gitea:GiteaConnector"
