@@ -1,0 +1,7 @@
+@startuml
+start
+:Get unreleased PR's commit hash;
+:Tag SEMVER on the commit;
+:Create Release for the commit;
+stop
+@enduml

@@ -1,6 +1,13 @@
-[
-project
-]
+[project]
 name = "project-git-release"
 version = "0.0.1"
-dependencies = []
+dependencies = [
+    "GitPython",
+    "logging",
+    "requests",
+    "jsonpath-ng"
+]
+
+[tool.pytest.ini_options]
+testpaths = ["test/pgr"]
+pythonpath = ["src"]
