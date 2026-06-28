@@ -2,10 +2,11 @@
 name = "project-git-release"
 version = "0.0.1"
 dependencies = [
-    "GitPython",
     "logging",
     "requests",
-    "jsonpath-ng"
+    "jsonpath-ng",
+    "typer",
+    "dotenv"
 ]
 
 [tool.pytest.ini_options]

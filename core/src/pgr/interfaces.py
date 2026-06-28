@@ -75,3 +75,4 @@ class NewVersion:
 
     def get_full_version(self):
         return f"{self.prefix}{self.semver}"
+

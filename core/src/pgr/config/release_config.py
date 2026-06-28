@@ -13,7 +13,8 @@ class ReleaseConfig:
                  version_config_text_append_missing: bool = True,
                  version_config_marker: str = "x-git-release-version",
                  version_config_marker_block_start: str = "x-git-release-version-start",
-                 version_config_marker_block_end: str = "x-git-release-version-end"
+                 version_config_marker_block_end: str = "x-git-release-version-end",
+                 auto_delete_temp_dir: bool = True
                  ):
         self.token = token
         self.url = url
@@ -33,6 +34,7 @@ class ReleaseConfig:
         self.version_config_marker_block_start = version_config_marker_block_start
         self.version_config_marker_block_end = version_config_marker_block_end
         self.version_config_text_append_missing = version_config_text_append_missing
+        self.auto_delete_temp_dir = auto_delete_temp_dir
 
     def git_url(self) -> str:
         return f"{self.url}/{self.owner}/{self.repo}"
