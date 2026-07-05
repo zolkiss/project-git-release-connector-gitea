@@ -1,47 +1,51 @@
-# project-git-release (WIP)
+# project-git-release-connector-gitea (WIP)
 
-## Disclaimer
+## Gitea Connector
 
-I'm not a Python developer... I'm doing this as a hobby, because I need something to create version and releases on
-Gitea
-for my home project on the self-hosted Gitea. Use at your own risk, the source is open. I do not take responsibility for
-the
-damaged caused.
+This is a sample Connector implementation for the project-git-release-core project. For the whole documentation,
+please refer to the core project's README.md file.
+
+## General Disclaimer
+
+I'm not a Python developer... I'm doing this as a hobby, because I need something to create versions and releases on
+Gitea for my home project on self-hosted Gitea. Use at your own risk, the source is open. I do not take
+responsibility for any damage caused.
 
 ## About the project
 
-The project is heavily inspired by the [release-please](https://github.com/googleapis/release-please) project. The goal
-of the
-project is to provide a similar flow to collect changes based on conventional commit messages, and handle the releases.
+The project is heavily inspired by the [release-please](https://github.com/googleapis/release-please) project. The
+goal is to provide a similar flow for collecting changes based on conventional commit messages and handling
+releases.
 
-Since the release-please is tied to the Github, it cannot be really used for Gitea, Bitbucket, Gitlab, etc. This gave
-the idea
-to create a library, which can be used on a modular base, and can be freely extended by You, or anyone else.
+Since release-please is tied to GitHub, it cannot really be used for Gitea, Bitbucket, GitLab, etc. This led to the
+idea of creating a library that can be used in a modular way, and can be freely extended by you or anyone else.
 
-Since my use case is to release project version in self-hosted environment (Release on Gitea using Argo Workflow), I
-decided to go with Python.
+Since my use case is to release project versions in a self-hosted environment (releasing on Gitea using Argo
+Workflow), I decided to go with Python.
 
 ## About the author
 
-Well... I'm a Java software developer since November 2011. I worked in multiple domain (telco, retail, finance, etc.).
-Technology side I started with Java EE, but went with Spring (Boot) for the last 10 Years, but I'm definitely not a
-Python developer.
+I've been a Java software developer since November 2011. I've worked in multiple domains (telco, retail, finance,
+etc.). On the technology side, I started with Java EE, but have used Spring (Boot) for the last 10 years, though I'm
+definitely not a Python developer.
 
-To implement the project, I used the Claude Free Tier, please the [AI Disclaimer](#ai-disclaimer) for more information.
+To implement the project, I used Claude (Free Tier); please see the [AI Disclaimer](#ai-disclaimer) below for more
+information.
 
 ## AI Disclaimer
 
-As I mentioned above, I'm not a Python developer, hence I used Claude AI (free tier) to help in the creation of the
+As I mentioned above, I'm not a Python developer, hence I used Claude AI (Free Tier) to help in the creation of the
 project.
 
-Currently, for the project I did not generated any code block. What I used the AI for:
+Currently, for the project I did not generated any actual code blocks for this project (as far as I remember). What I
+used AI for:
 
-* Helping in the generation of GIT commands
-* Helping in the generation of Regex expression
-* I asked about project structure
-* I asked about Python best practices
-* I used it for brainstorming
+* Helping generate Git commands
+* Helping generate regex expressions
+* Asking about project structure
+* Asking about Python best practices
+* Brainstorming
 * Proofreading this README file :D
 
-I tried to avoid to share whole project parts with AI, and I never gave access to use my project (no agentic AI was
-involved)
+I tried to avoid sharing whole project parts with the AI, and never gave it access to my project (no agentic AI was
+involved).
