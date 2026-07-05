@@ -81,7 +81,7 @@ class GiteaConnector(Connector):
             log.debug(response.content)
             return None
 
-    def get_latest_open_release_pr(self, state: str = "open") -> GitReleasePR | None:
+    def get_latest_release_pr(self, state: str) -> GitReleasePR | None:
         log.info(msg=f"Getting latest release PR")
         response = self.__get(
             url=f"{self.api_base_url}/pulls?base_branch={self.config.default_branch}&state={state}",
@@ -99,9 +99,34 @@ class GiteaConnector(Connector):
                     number=data["number"],
                     title=data["title"],
                     commit_sha=data["merge_commit_sha"],
-                    comment=data["body"]
+                    comment=data["body"],
+                    merged=data["merged"]
                 )
         return None
+
+    def get_latest_release_prs(self, state: str, limit: int = 10) -> list[GitReleasePR]:
+        log.info(msg=f"Getting latest release PRs")
+        response = self.__get(
+            url=f"{self.api_base_url}/pulls?base_branch={self.config.default_branch}&state={state}&limit={limit}",
+            msg_404=f"No pull requests can be found for repo {self.config.repo}",
+            msg_err=f"Error while querying the pull requests for repo {self.config.repo}")
+
+        pull_requests = []
+        if response is None:
+            return pull_requests
+
+        response_json = response.json()
+        for data in response_json:
+            if data["head"]["ref"] and data["state"] == state:
+                pull_requests.append(GitReleasePR(
+                    id=data["id"],
+                    number=data["number"],
+                    title=data["title"],
+                    commit_sha=data["merge_commit_sha"],
+                    comment=data["body"],
+                    merged=data["merged"]
+                ))
+        return pull_requests
 
     def create_release_pr(self, pull_request_title: str, pull_request_commit_text: str) -> GitReleasePR | None:
         log.info(msg=f"Creating release PR")
@@ -177,17 +202,10 @@ class GiteaConnector(Connector):
                 log.info(
                     f"The {tag_name} tag is a valid SEMVER version with prefix '{self.config.release_version_prefix}'")
 
-            log.info(f"Getting the details of tag {tag_name}...")
-            response = self.__get(
-                url=f"{self.api_base_url}/tags/{tag_name}",
-                msg_404=f"Cannot find the details for tag {tag_name}",
-                msg_err=f"Error while getting the details for tag {tag_name}"
-            )
-
-            if response is None:
+            response_json = self.get_tag_details(tag_name)
+            if response_json is None:
                 return None
 
-            response_json = response.json()
             commit_sha = response_json["commit"]["sha"]
             tag_message = response_json["message"]
 
@@ -201,6 +219,49 @@ class GiteaConnector(Connector):
 
         log.info("There is no release with valid version number.")
         return None
+
+    def get_release_by_tag(self, tag: str) -> GitRelease | None:
+        log.info("Getting the release for %s", tag)
+        response = self.__get(
+            url=f"{self.api_base_url}/releases/tags/{tag}",
+            msg_404=f"Cannot find release for tag {tag}",
+            msg_err=f"Error while getting the release for tag {tag}"
+        )
+
+        if response is None:
+            return None
+
+        release = response.json()
+        tag_name = release["tag_name"]
+        log.info(f"Found the release by tag {tag_name}")
+
+        response_json = self.get_tag_details(tag_name)
+        if response_json is None:
+            return None
+
+        commit_sha = response_json["commit"]["sha"]
+        tag_message = response_json["message"]
+
+        log.info(f"Commit SHA for version {tag_name}: {commit_sha}")
+
+        return GitRelease(
+            tag_name=tag_name,
+            tag_message=tag_message,
+            commit_sha=commit_sha
+        )
+
+    def get_tag_details(self, tag_name: str) -> dict | None:
+        log.info(f"Getting the details of tag {tag_name}...")
+        response = self.__get(
+            url=f"{self.api_base_url}/tags/{tag_name}",
+            msg_404=f"Cannot find the details for tag {tag_name}",
+            msg_err=f"Error while getting the details for tag {tag_name}"
+        )
+
+        if response is None:
+            return None
+
+        return response.json()
 
     def get_commit_details(self, hash_and_msg: GitHashAndMsg) -> CommitDetails | None:
         log.info("Getting details for %s", hash_and_msg.hash)
