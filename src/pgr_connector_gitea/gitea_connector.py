@@ -6,7 +6,7 @@ import requests
 from pgr import Connector
 from pgr.config.release_config import ReleaseConfig
 from pgr.git import GitHashAndMsg
-from pgr.interfaces import GitReleasePR, GitRelease, CommitDetails
+from pgr.interfaces import GitReleasePR, GitRelease, CommitDetails, GitReleaseResponse
 from requests import Response
 
 from pgr_connector_gitea import log
@@ -43,15 +43,15 @@ class GiteaConnector(Connector):
             log.debug(response.content)
             return None
 
-    def __post(self,
-               url: str,
-               request_body: dict,
-               msg_404: str = "Cannot find the requested resource",
-               msg_err: str = "Error while requesting the resource") -> Response | None:
+    def __post_json(self,
+                    url: str,
+                    request_body: dict,
+                    msg_404: str = "Cannot find the requested resource",
+                    msg_err: str = "Error while requesting the resource") -> Response | None:
         headers = self.__create_header()
 
         log.debug("Calling url (POST): %s", url)
-        response = requests.post(url, data=request_body, headers=headers)
+        response = requests.post(url, json=request_body, headers=headers)
         if 200 <= response.status_code <= 202:
             return response
         elif 404 == response.status_code:
@@ -130,12 +130,14 @@ class GiteaConnector(Connector):
 
     def create_release_pr(self, pull_request_title: str, pull_request_commit_text: str) -> GitReleasePR | None:
         log.info(msg=f"Creating release PR")
-        request_body = dict()
-        request_body["base"] = self.config.default_branch
-        request_body["head"] = self.config.release_branch
-        request_body["title"] = pull_request_title
-        request_body["body"] = pull_request_commit_text
-        response = self.__post(
+        request_body = {
+            'base': self.config.default_branch,
+            'head': self.config.release_branch,
+            'title': pull_request_title,
+            'body': pull_request_commit_text
+        }
+
+        response = self.__post_json(
             url=f"{self.api_base_url}/pulls",
             request_body=request_body,
             msg_404=f"No pull requests can be found for repo {self.config.repo}",
@@ -150,7 +152,8 @@ class GiteaConnector(Connector):
             number=data["number"],
             title=data["title"],
             commit_sha=data["merge_commit_sha"],
-            comment=data["body"]
+            comment=data["body"],
+            merged=False
         )
 
     def update_release_pr(self, release_pr_number: int, pull_request_title: str,
@@ -174,7 +177,8 @@ class GiteaConnector(Connector):
             number=data["number"],
             title=data["title"],
             commit_sha=data["merge_commit_sha"],
-            comment=data["body"]
+            comment=data["body"],
+            merged=False
         )
 
     def get_latest_release(self) -> GitRelease | None:
@@ -291,4 +295,41 @@ class GiteaConnector(Connector):
             creation_time=datetime.fromisoformat(response_json["created"]),
             body=body,
             footers=footers
+        )
+
+    def create_release(self, latest_unreleased_version: GitRelease, change_log: str, draft: bool = False,
+                       pre_release: bool = False) -> GitReleaseResponse:
+        log.info("Creating release for %s (%s)", latest_unreleased_version.tag_name,
+                 latest_unreleased_version.commit_sha)
+
+        request_body = {
+            'body': change_log,
+            'draft': draft,
+            'name': latest_unreleased_version.tag_name,
+            'prerelease': pre_release,
+            'tag_message': latest_unreleased_version.tag_message,
+            'tag_name': latest_unreleased_version.tag_name,
+            'target_commitish': latest_unreleased_version.commit_sha
+        }
+
+        log.debug("Request body for release creation:\n%s", request_body)
+
+        response = self.__post_json(
+            url=f"{self.api_base_url}/releases",
+            request_body=request_body,
+            msg_404=f"Cannot find release endpoint",
+            msg_err=f"Error while creating release for commit"
+        )
+
+        if response is None:
+            return None
+
+        data = response.json()
+        return GitReleaseResponse(
+            tag_name=data["tag_name"],
+            name=data["name"],
+            commit_sha=data["target_commitish"],
+            id=data["id"],
+            draft=data["draft"],
+            pre_release=data["prerelease"]
         )
