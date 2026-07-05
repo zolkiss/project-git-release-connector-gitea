@@ -3,12 +3,12 @@ from datetime import datetime
 from logging import log
 
 import requests
-from requests import Response
-
 from pgr import Connector
 from pgr.config.release_config import ReleaseConfig
 from pgr.git import GitHashAndMsg
 from pgr.interfaces import GitReleasePR, GitRelease, CommitDetails
+from requests import Response
+
 from pgr_connector_gitea import log
 
 
@@ -151,9 +151,6 @@ class GiteaConnector(Connector):
             commit_sha=data["merge_commit_sha"],
             comment=data["body"]
         )
-
-    def update_first_commit_pr(self, pull_request_id: str):
-        pass
 
     def get_latest_release(self) -> GitRelease | None:
         log.info("Getting the releases...")
