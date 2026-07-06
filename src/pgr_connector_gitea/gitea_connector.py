@@ -5,8 +5,7 @@ from logging import log
 import requests
 from pgr import Connector
 from pgr.config.release_config import ReleaseConfig
-from pgr.git import GitHashAndMsg
-from pgr.interfaces import GitReleasePR, GitRelease, CommitDetails, GitReleaseResponse
+from pgr.interfaces import GitReleasePR, GitRelease, CommitDetails, GitReleaseResponse, GitHashAndMsg
 from requests import Response
 
 from pgr_connector_gitea import log
