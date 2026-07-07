@@ -5,8 +5,13 @@ dependencies = [
     "project-git-release-core"
 ]
 
+
 [tool.setuptools.packages.find]
 where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["test"]
+pythonpath = ["src"]
 
 [project.entry-points."pgr.connectors"]
 gitea = "pgr_connector_gitea:GiteaConnector"
