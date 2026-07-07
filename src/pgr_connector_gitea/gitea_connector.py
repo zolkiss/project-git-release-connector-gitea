@@ -3,9 +3,8 @@ from datetime import datetime
 from logging import log
 
 import requests
-from pgr import Connector
-from pgr.config.release_config import ReleaseConfig
-from pgr.interfaces import GitReleasePR, GitRelease, CommitDetails, GitReleaseResponse, GitHashAndMsg
+from pgr.classes import GitReleasePR, GitRelease, CommitDetails, GitReleaseResponse, GitHashAndMsg
+from pgr.core import Connector, ReleaseConfig
 from requests import Response
 
 from pgr_connector_gitea import log
