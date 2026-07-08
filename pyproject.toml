@@ -33,5 +33,5 @@ where = ["src"]
 testpaths = ["test"]
 pythonpath = ["src"]
 
-[project.entry-points."pgr.connectors"]
-gitea = "pgr_connector_gitea:GiteaConnector"
+[project.entry-points."project_git_release.connectors"]
+gitea = "project_git_release_connector_gitea:GiteaConnector"
