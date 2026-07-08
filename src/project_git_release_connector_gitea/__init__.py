@@ -1,6 +1,6 @@
 import logging
 
-from pgr import create_logger, create_console_handler
+from project_git_release import create_logger, create_console_handler
 
 log = create_logger(name=__name__, level=logging.DEBUG)
 log.addHandler(create_console_handler(level=logging.DEBUG))
