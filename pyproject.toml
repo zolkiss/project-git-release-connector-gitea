@@ -1,10 +1,30 @@
 [project]
 name = "project-git-release-connector-gitea"
 version = "0.0.1"
+authors = [
+    { name = "zolkiss", email = "kisszoltan89@gmail.com" }
+]
+description = "project-git-release - Gitea Connector"
+readme = "README.md"
+requires-python = ">=3.12"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Operating System :: OS Independent",
+    "Topic :: Software Development :: Version Control :: Git"
+]
+license = "MIT"
+license-files = ["LICENSE"]
 dependencies = [
     "project-git-release-core"
 ]
 
+[project.urls]
+Homepage = "https://github.com/zolkiss/project-git-release-connector-gitea"
+Issues = "https://github.com/zolkiss/project-git-release-connector-gitea/issues"
+
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
 
 [tool.setuptools.packages.find]
 where = ["src"]
