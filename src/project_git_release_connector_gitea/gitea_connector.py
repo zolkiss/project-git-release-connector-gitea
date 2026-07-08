@@ -3,11 +3,11 @@ from datetime import datetime
 from logging import log
 
 import requests
-from pgr.classes import GitReleasePR, GitRelease, CommitDetails, GitReleaseResponse, GitHashAndMsg
-from pgr.core import Connector, ReleaseConfig
+from project_git_release.classes import GitReleasePR, GitRelease, CommitDetails, GitReleaseResponse, GitHashAndMsg
+from project_git_release.core import Connector, ReleaseConfig
 from requests import Response
 
-from pgr_connector_gitea import log
+from project_git_release_connector_gitea import log
 
 
 class GiteaConnector(Connector):
