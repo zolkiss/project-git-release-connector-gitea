@@ -1,7 +1,6 @@
 import pytest
-from project_git_release.classes import GitReleasePR
-
 from conftest import create_response, to_bytes
+from project_git_release.classes import GitReleasePR
 
 
 @pytest.mark.parametrize("case", [None], ids=["Update PR - OK"])

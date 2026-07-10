@@ -1,7 +1,7 @@
 import pytest
+from conftest import create_response, to_bytes
 from project_git_release.classes import GitReleasePR
 
-from conftest import create_response, to_bytes
 from project_git_release_connector_gitea import GiteaConnector
 
 

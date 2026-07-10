@@ -1,7 +1,6 @@
 import pytest
-from project_git_release.classes import GitReleasePR
-
 from conftest import create_response, to_bytes, __TEST_REPO_NAME
+from project_git_release.classes import GitReleasePR
 
 
 @pytest.mark.parametrize("case", [None], ids=["Standard response - 404"])
