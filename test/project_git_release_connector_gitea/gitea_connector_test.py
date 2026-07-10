@@ -221,6 +221,14 @@ def test_get_latest_release_prs(case, release_config, connector, mock_get):
     assert second_test_object["merged"] == second_response.merged
 
 
+@pytest.mark.parametrize("case", [None], ids=["Get latest release PRs - No response"])
+def test_get_latest_release_prs_no_response(case, release_config, connector, mock_get):
+    mock_get.return_value = create_response(404)
+    response = connector.get_latest_release_prs("open")
+
+    assert response is not None
+    assert 0 == len(response)
+
 @pytest.mark.parametrize("case", [None], ids=["Get latest release PRs - empty result"])
 def test_get_latest_release_prs_empty_result(case, release_config, connector, mock_get):
     test_body = to_bytes([])
