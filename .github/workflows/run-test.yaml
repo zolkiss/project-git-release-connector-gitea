@@ -9,7 +9,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  build:
+  build-and-test:
     if: ${{ !startsWith(github.head_ref, 'release-please--branches--master')}}
     runs-on: ubuntu-latest
 
@@ -30,7 +30,7 @@ jobs:
 
       - name: Running tests
         run: |
-          pip install -r src/project_git_release_connector_gitea.egg-info/requires.txt
+          pip install -e ".[test]"
           pytest .
 
       - name: Uploading test artifacts
