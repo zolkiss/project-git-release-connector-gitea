@@ -1,6 +1,7 @@
 import os
 from datetime import datetime
 from logging import log
+from typing import Any
 
 import requests
 from project_git_release.classes import GitReleasePR, GitRelease, CommitDetails, GitReleaseResponse, GitHashAndMsg
@@ -91,8 +92,7 @@ class GiteaConnector(Connector):
 
         response_json = response.json()
         for data in response_json:
-            if (data["head"]["ref"] == self.config.release_branch
-                    and data["state"] == state):
+            if self.__validate_pr_response_state_and_head(data, state):
                 return GitReleasePR(
                     id=data["id"],
                     number=data["number"],
@@ -116,7 +116,7 @@ class GiteaConnector(Connector):
 
         response_json = response.json()
         for data in response_json:
-            if data["head"]["ref"] and data["state"] == state:
+            if self.__validate_pr_response_state_and_head(data, state):
                 pull_requests.append(GitReleasePR(
                     id=data["id"],
                     number=data["number"],
@@ -126,6 +126,10 @@ class GiteaConnector(Connector):
                     merged=data["merged"]
                 ))
         return pull_requests
+
+    def __validate_pr_response_state_and_head(self, data, state: str) -> Any:
+        return (data["head"]["ref"] == self.config.release_branch
+                and data["state"] == state)
 
     def create_release_pr(self, pull_request_title: str, pull_request_commit_text: str) -> GitReleasePR | None:
         log.info(msg=f"Creating release PR")

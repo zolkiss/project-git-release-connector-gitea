@@ -171,6 +171,65 @@ def test_get_latest_release_pr_wrong_state(case, release_config, connector, mock
     assert response is None
 
 
+@pytest.mark.parametrize("case", [None], ids=["Get latest release PRs - OK"])
+def test_get_latest_release_prs(case, release_config, connector, mock_get):
+    first_test_object = {
+        "head": {
+            "ref": f"{release_config.release_branch}"
+        },
+        "state": "open",
+        "id": -1,
+        "number": -2,
+        "title": "very_title_01",
+        "merge_commit_sha": "test_commit_sha_01",
+        "body": "test_comment_01",
+        "merged": True
+    }
+    second_test_object = {
+        "head": {
+            "ref": f"{release_config.release_branch}"
+        },
+        "state": "open",
+        "id": -3,
+        "number": -4,
+        "title": "very_title_02",
+        "merge_commit_sha": "test_commit_sha_02",
+        "body": "test_comment_02",
+        "merged": False
+    }
+    test_body = to_bytes([first_test_object, second_test_object])
+    mock_get.return_value = create_response(content=test_body)
+    response = connector.get_latest_release_prs("open")
+
+    assert response is not None
+    assert 2 == len(response)
+
+    first_response = response[0]
+    assert first_test_object["id"] == first_response.id
+    assert first_test_object["number"] == first_response.number
+    assert first_test_object["title"] == first_response.title
+    assert first_test_object["merge_commit_sha"] == first_response.commit_sha
+    assert first_test_object["body"] == first_response.comment
+    assert first_test_object["merged"] == first_response.merged
+
+    second_response = response[1]
+    assert second_test_object["id"] == second_response.id
+    assert second_test_object["number"] == second_response.number
+    assert second_test_object["title"] == second_response.title
+    assert second_test_object["merge_commit_sha"] == second_response.commit_sha
+    assert second_test_object["body"] == second_response.comment
+    assert second_test_object["merged"] == second_response.merged
+
+
+@pytest.mark.parametrize("case", [None], ids=["Get latest release PRs - empty result"])
+def test_get_latest_release_prs_empty_result(case, release_config, connector, mock_get):
+    test_body = to_bytes([])
+    mock_get.return_value = create_response(content=test_body)
+    response = connector.get_latest_release_prs("open")
+
+    assert response is not None
+    assert 0 == len(response)
+
 @pytest.mark.parametrize("case", [None], ids=["Create PR - OK"])
 def test_create_pr(case, release_config, connector, mock_post):
     commit_text = "test_commit_text"
