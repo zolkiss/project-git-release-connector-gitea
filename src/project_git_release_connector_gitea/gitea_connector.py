@@ -1,4 +1,3 @@
-import os
 from datetime import datetime
 from logging import log
 from typing import Any
@@ -284,7 +283,7 @@ class GiteaConnector(Connector):
         response_json = response.json()
         commit_message = response_json["commit"]["message"].replace(hash_and_msg.message, "").strip()
 
-        commit_message_parts: list[str] = commit_message.split(os.linesep + os.linesep)
+        commit_message_parts: list[str] = commit_message.split("\n\n")
         if len(commit_message_parts) > 1:
             body = commit_message_parts[0].strip()
             footers = commit_message_parts[1:]
