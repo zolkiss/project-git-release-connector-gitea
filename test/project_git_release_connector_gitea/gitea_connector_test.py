@@ -1,8 +1,8 @@
 import json
 
 import pytest
-from project_git_release.core import ReleaseConfig
 from project_git_release.classes import GitReleasePR
+from project_git_release.core import ReleaseConfig
 from pytest_mock import MockType
 from requests import Response
 
