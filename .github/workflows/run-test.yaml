@@ -34,8 +34,8 @@ jobs:
           pytest .
 
       - name: Uploading test artifacts
-        if: always()
+        if: ${{ !cancelled() }}
         uses: actions/upload-artifact@v4
         with:
-          name: test-coverage
+          name: test-result
           path: htmlcov/
