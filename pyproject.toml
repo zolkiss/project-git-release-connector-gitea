@@ -18,6 +18,9 @@ dependencies = [
     "project-git-release-core==0.0.1-005"
 ]
 
+[project.optional-dependencies]
+test = ["pytest", "pytest-cov", "pytest-mock"]
+
 [project.urls]
 Homepage = "https://github.com/zolkiss/project-git-release-connector-gitea"
 Issues = "https://github.com/zolkiss/project-git-release-connector-gitea/issues"
@@ -32,6 +35,7 @@ where = ["src"]
 [tool.pytest.ini_options]
 testpaths = ["test"]
 pythonpath = ["src"]
+addopts = "--cov=src --cov-report=html --cov-fail-under=80"
 
 [project.entry-points."project_git_release.connectors"]
 gitea = "project_git_release_connector_gitea:GiteaConnector"
