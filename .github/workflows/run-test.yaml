@@ -32,3 +32,9 @@ jobs:
         run: |
           pip install -r src/project_git_release_connector_gitea.egg-info/requires.txt
           pytest .
+
+      - name: Uploading test artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-coverage
+          path: htmlcov/
