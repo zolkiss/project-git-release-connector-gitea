@@ -34,6 +34,7 @@ jobs:
           pytest .
 
       - name: Uploading test artifacts
+        continue-on-error: true
         uses: actions/upload-artifact@v4
         with:
           name: test-coverage
