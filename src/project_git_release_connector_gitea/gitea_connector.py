@@ -91,7 +91,8 @@ class GiteaConnector(Connector):
 
         response_json = response.json()
         for data in response_json:
-            if data["head"]["ref"] and data["state"] == state:
+            if (data["head"]["ref"] == self.config.release_branch
+                    and data["state"] == state):
                 return GitReleasePR(
                     id=data["id"],
                     number=data["number"],
