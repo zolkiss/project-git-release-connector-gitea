@@ -1,6 +1,6 @@
 [project]
 name = "project-git-release-connector-gitea"
-version = "0.0.1-003"
+version = "0.0.1-004"
 authors = [
     { name = "zolkiss", email = "kisszoltan89@gmail.com" }
 ]
@@ -15,7 +15,7 @@ classifiers = [
 license = "MIT"
 license-files = ["LICENSE"]
 dependencies = [
-    "project-git-release-core==0.0.1-005"
+    "project-git-release-core==0.0.1.post7"
 ]
 
 [project.optional-dependencies]
