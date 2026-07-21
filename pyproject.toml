@@ -15,7 +15,7 @@ classifiers = [
 license = "MIT"
 license-files = ["LICENSE"]
 dependencies = [
-    "project-git-release-core==0.0.1-005"
+    "project-git-release-core==0.0.1-007"
 ]
 
 [project.optional-dependencies]
